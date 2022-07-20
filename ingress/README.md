@@ -10,5 +10,5 @@
 - create target group like below
 ![image](https://user-images.githubusercontent.com/50055329/179919983-dfa27d64-9b48-4d32-a1ea-53e9b50118bd.png)
 
-- exit auto scalling and enable load balancer like below
+- edit auto scalling and enable load balancer like below
 ![image](https://user-images.githubusercontent.com/50055329/179920520-a504c5b1-0bae-43b3-9b58-9e28a7938104.png)
