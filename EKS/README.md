@@ -60,8 +60,8 @@ Please refer https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.htm
 # Now I am going to create a EKS cluster autoscaler
 ## How to install Cluster Autoscaler on AWS EKS
 Creating IAM role with this name "nodegroup-autoscale-policy" and will be attached with previous worker node's role
-- 
-{
+
+- {
     "Version": "2012-10-17",
     "Statement": [
         {
