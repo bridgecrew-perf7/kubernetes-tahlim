@@ -79,7 +79,7 @@ Creating IAM role with this name "nodegroup-autoscale-policy" and will be attach
             "Effect": "Allow"
         }
     ]
-}
+} -
 
 ## Downloading manifest file
 - curl -o cluster-autoscaler-autodiscover.yaml https://raw.githubusercontent.com/kubernetes/autoscaler/master/cluster-autoscaler/cloudprovider/aws/examples/cluster-autoscaler-autodiscover.yaml
