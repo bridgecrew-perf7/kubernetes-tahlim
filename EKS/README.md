@@ -31,6 +31,10 @@ Please refer https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.htm
 - ./aws/install -i /usr/local/aws-cli -b /usr/local/bin
 - aws --version
 
+## aws configure
+
+Note: (Access and Secrete ussi user ka hona chahiye jis user se cluster create hua hi)
+
 ##  Install kubectl
 
 - curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.4/2021-07-05/bin/linux/amd64/kubectl
