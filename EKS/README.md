@@ -6,6 +6,7 @@
 ## 2. Creating a EKS cluster
 Note: First create a role for EKS Cluster:
 - AmazonEKSClusterPolicy
+
 second create a role for Worker node group:
 - AmazonEKS_CNI_Policy
 - AmazonEKSWorkerNodePolicy
