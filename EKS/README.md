@@ -16,6 +16,8 @@ Second create a role for Worker node group:
 
 Please refer https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html   to create EKS cluster
 
+## 4. Creating a Worker node
+
 ![image](https://user-images.githubusercontent.com/50055329/180602131-6b8679cb-1652-4af1-8e49-b1fca5481726.png)
 
 ===========================================================================================
