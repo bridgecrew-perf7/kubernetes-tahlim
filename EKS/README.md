@@ -44,6 +44,12 @@ Please refer https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.htm
 - aws-iam-authenticator help
 - kubectl cluster-info
 
+## to connect witj EKS cluster we have two ways
+## First way:
 - aws eks --region us-east-1 describe-cluster --name Dmat-onp-cluster --query cluster.status
 - aws eks --region us-east-1 update-kubeconfig --name Dmat-onp-cluster
 - kubectl get svc
+
+## Second way:
+- aws configure list
+- aws eks update-kubeconfig --name Dmat-onp-cluster
