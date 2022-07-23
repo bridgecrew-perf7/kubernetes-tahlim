@@ -115,6 +115,7 @@ Creating IAM role with this name "nodegroup-autoscale-policy" and will be attach
 ![image](https://user-images.githubusercontent.com/50055329/180606488-94828dfa-69c9-401d-9ad8-cca4fb4b14d2.png)
 
 - kubectl exit deployment nginx
+
 ![image](https://user-images.githubusercontent.com/50055329/180606972-8d1c36f4-fd96-444d-8e3d-57bedf2cdd5f.png)
 
 ![image](https://user-images.githubusercontent.com/50055329/180606995-e80839a3-adbe-4988-81c2-cbbf06250436.png)
