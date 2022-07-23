@@ -95,3 +95,17 @@ Creating IAM role with this name "nodegroup-autoscale-policy" and will be attach
 ![image](https://user-images.githubusercontent.com/50055329/180605132-c68120bd-2abb-43b9-9fe7-32b685a3938b.png)
 
 ![image](https://user-images.githubusercontent.com/50055329/180605288-2657eb0a-ceab-4f9d-9cb3-3b407606112d.png)
+
+===========================================================================================
+# Now I going to deploy nginx application
+## k8s cluster is up and running
+
+- kubectl create deployment nginx --image=nginx --replicas=2
+
+- kubectl expose deployment nginx --port=80 --target-port=80 --name=service --type=LoadBalancer
+
+- kubectl get pod
+
+- kubectlget svc
+
+![image](https://user-images.githubusercontent.com/50055329/180606488-94828dfa-69c9-401d-9ad8-cca4fb4b14d2.png)
