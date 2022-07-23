@@ -33,7 +33,7 @@ Please refer https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.htm
 
 ## aws configure
 
-Note: (Access and Secrete ussi user ka hona chahiye jis user se cluster create hua hi)
+Note: (Access and Secrete key should be same the user which you had created eks cluster) 
 
 ##  Install kubectl
 
