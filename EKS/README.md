@@ -55,3 +55,41 @@ Please refer https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.htm
 ## Second way:
 - aws configure list
 - aws eks update-kubeconfig --name Dmat-onp-cluster
+
+===========================================================================================
+# Now I am going to create a EKS cluster autoscaler
+## How to install Cluster Autoscaler on AWS EKS
+Creating IAM role with this name "nodegroup-autoscale-policy" and will be attached with previous worker node's role
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "sts:AssumeRole",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeTags",
+                "autoscaling:SetDesiredCapacity",
+                "autoscaling:TerminateInstanceInAutoScalingGroup",
+                "ec2:DescribeLaunchTemplateVersions"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
+
+## Downloading manifest file
+curl -o cluster-autoscaler-autodiscover.yaml https://raw.githubusercontent.com/kubernetes/autoscaler/master/cluster-autoscaler/cloudprovider/aws/examples/cluster-autoscaler-autodiscover.yaml
+
+kubectl apply -f cluster-autoscaler-autodiscover.yaml
+
+kubectl get deployment -n kube-system cluster-autoscaler 
+
+kubectl edit deployment -n kube-system cluster-autoscaler
+
+![image](https://user-images.githubusercontent.com/50055329/180605050-2ebb6a10-1ea4-4447-b709-5ddc8a30c553.png)
+
+![image](https://user-images.githubusercontent.com/50055329/180605132-c68120bd-2abb-43b9-9fe7-32b685a3938b.png)
