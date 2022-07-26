@@ -31,7 +31,7 @@ Note: (Access and Secrete key should be same the user which you had created eks 
 ## Now we are starting from here
 - aws configure list
 
--  eksctl create cluster \
+- eksctl create cluster \
    --name my-cluster \
    --region us-east-1 \ 
    --version 1.22 \
