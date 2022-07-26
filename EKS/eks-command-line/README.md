@@ -26,3 +26,17 @@ Note: (Access and Secrete key should be same the user which you had created eks 
 - chmod +x ./aws-iam-authenticator &&  mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$PATH:$HOME/bin && echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
 - aws-iam-authenticator help
 - kubectl cluster-info
+
+========================================
+## Now we are starting from here
+- aws configure list
+
+-  eksctl create cluster \
+   --name my-cluster \
+   --region us-east-1 \ 
+   --version 1.22 \
+   --nodegroup-name demo-nodes \
+   --node-type t2.micro \
+   --nodes 2 \
+   --nodes-min 2 \
+   --nodes-max 2
