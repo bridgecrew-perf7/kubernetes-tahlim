@@ -48,7 +48,9 @@ eksctl create cluster --name=eksdemo1 \
                       --without-nodegroup 
 
 # Get List of clusters
-eksctl get cluster                  
+eksctl get cluster
+
+eksctl delete cluster eksdemo1
 ```
 ## Step-02: Create & Associate IAM OIDC Provider for our EKS Cluster
 ```                   
@@ -80,6 +82,7 @@ eksctl create nodegroup --cluster=eksdemo1 \
                         --full-ecr-access \
                         --appmesh-access \
                         --alb-ingress-access 
+eksctl delete nodegroup --cluster=eksdemo1 --name=eksdemo1-ng-public1
 ```
 ## Step-05: Verify Cluster & Nodes
 ```
