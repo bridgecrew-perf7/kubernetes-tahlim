@@ -68,6 +68,7 @@ provisioner: ebs.csi.aws.com
 volumeBindingMode: WaitForFirstConsumer
 ```
 - kubectl apply -f 01-storage-class.yml
+- kubectl get sc
 
 - vim 02-persistent-volume-claim.yml
 ```
@@ -84,6 +85,8 @@ spec:
       storage: 4Gi
 ```
 - kubectl apply -f 02-persistent-volume-claim.yml
+- kubectl get pvc
+- kubectl get pv
 
 vim 03-UserManagement-ConfigMap.yml
 ```
