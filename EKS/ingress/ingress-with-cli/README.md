@@ -286,3 +286,269 @@ kubectl describe ingressclass my-aws-ingress-class
 - [AWS Load Balancer Controller Install](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)
 - [ECR Repository per region](https://docs.aws.amazon.com/eks/latest/userguide/add-ons-images.html)
 
+===========================================================================================================================
+## First creating ingress class
+```
+ingressclass-resource.yaml
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: my-aws-ingress-class
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  controller: ingress.k8s.aws/alb
+```
+## Second creating deployment and service for app1
+```
+vim 01-Nginx-App1-Deployment-and-NodePortService.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1-nginx-deployment
+  labels:
+    app: app1-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app1-nginx
+  template:
+    metadata:
+      labels:
+        app: app1-nginx
+    spec:
+      containers:
+        - name: app1-nginx
+          image: stacksimplify/kube-nginxapp1:1.0.0
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1-nginx-nodeport-service
+  labels:
+    app: app1-nginx
+  annotations:
+#Important Note:  Need to add health check path annotations in service level if we are planning to use multiple targets in a load balancer
+    alb.ingress.kubernetes.io/healthcheck-path: /app1/index.html
+spec:
+  type: NodePort
+  selector:
+    app: app1-nginx
+  ports:
+    - port: 80
+      targetPort: 80
+```      
+## Third creating deployment and service for app2
+```
+vim 02-Nginx-App2-Deployment-and-NodePortService.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app2-nginx-deployment
+  labels:
+    app: app2-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app2-nginx
+  template:
+    metadata:
+      labels:
+        app: app2-nginx
+    spec:
+      containers:
+        - name: app2-nginx
+          image: stacksimplify/kube-nginxapp2:1.0.0
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app2-nginx-nodeport-service
+  labels:
+    app: app2-nginx
+  annotations:
+#Important Note:  Need to add health check path annotations in service level if we are planning to use multiple targets in a load balancer
+    alb.ingress.kubernetes.io/healthcheck-path: /app2/index.html
+spec:
+  type: NodePort
+  selector:
+    app: app2-nginx
+  ports:
+    - port: 80
+      targetPort: 80
+```    
+## Third creating deployment and service for app2
+```
+vim 03-Nginx-App3-Deployment-and-NodePortService.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app3-nginx-deployment
+  labels:
+    app: app3-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app3-nginx
+  template:
+    metadata:
+      labels:
+        app: app3-nginx
+    spec:
+      containers:
+        - name: app3-nginx
+          image: stacksimplify/kubenginx:1.0.0
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app3-nginx-nodeport-service
+  labels:
+    app: app3-nginx
+  annotations:
+#Important Note:  Need to add health check path annotations in service level if we are planning to use multiple targets in a load balancer
+    alb.ingress.kubernetes.io/healthcheck-path: /index.html
+spec:
+  type: NodePort
+  selector:
+    app: app3-nginx
+  ports:
+    - port: 80
+      targetPort: 80
+```      
+      
+## Step-01: Introduction
+- Discuss about the Architecture we are going to build as part of this Section
+- We are going to deploy all these 3 apps in kubernetes with context path based routing enabled in Ingress Controller
+  - /app1/* - should go to app1-nginx-nodeport-service
+  - /app2/* - should go to app1-nginx-nodeport-service
+  - /*    - should go to  app3-nginx-nodeport-service
+- As part of this process, this respective annotation `alb.ingress.kubernetes.io/healthcheck-path:` will be moved to respective application NodePort Service. 
+- Only generic settings will be present in Ingress manifest annotations area `04-ALB-Ingress-ContextPath-Based-Routing.yml`  
+
+
+## Step-02: Review Nginx App1, App2 & App3 Deployment & Service
+- Differences for all 3 apps will be only two fields from kubernetes manifests perspective and their naming conventions
+  - **Kubernetes Deployment:** Container Image name
+  - **Kubernetes Node Port Service:** Health check URL path 
+- **App1 Nginx: 01-Nginx-App1-Deployment-and-NodePortService.yml**
+  - **image:** stacksimplify/kube-nginxapp1:1.0.0
+  - **Annotation:** alb.ingress.kubernetes.io/healthcheck-path: /app1/index.html
+- **App2 Nginx: 02-Nginx-App2-Deployment-and-NodePortService.yml**
+  - **image:** stacksimplify/kube-nginxapp2:1.0.0
+  - **Annotation:** alb.ingress.kubernetes.io/healthcheck-path: /app2/index.html
+- **App3 Nginx: 03-Nginx-App3-Deployment-and-NodePortService.yml**
+  - **image:** stacksimplify/kubenginx:1.0.0
+  - **Annotation:** alb.ingress.kubernetes.io/healthcheck-path: /index.html
+
+
+## Step-03: Create ALB Ingress Context path based Routing Kubernetes manifest
+- **ALB-Ingress-ContextPath-Based-Routing.yml**
+```yaml
+# Annotations Reference: https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-cpr-demo
+  annotations:
+    # Load Balancer Name
+    alb.ingress.kubernetes.io/load-balancer-name: cpr-ingress
+    # Ingress Core Settings
+    #kubernetes.io/ingress.class: "alb" (OLD INGRESS CLASS NOTATION - STILL WORKS BUT RECOMMENDED TO USE IngressClass Resource)
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    # Health Check Settings
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP 
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    #Important Note:  Need to add health check path annotations in service level if we are planning to use multiple targets in a load balancer    
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'   
+spec:
+  ingressClassName: my-aws-ingress-class   # Ingress Class                  
+  rules:
+    - http:
+        paths:      
+          - path: /app1
+            pathType: Prefix
+            backend:
+              service:
+                name: app1-nginx-nodeport-service
+                port: 
+                  number: 80
+          - path: /app2
+            pathType: Prefix
+            backend:
+              service:
+                name: app2-nginx-nodeport-service
+                port: 
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app3-nginx-nodeport-service
+                port: 
+                  number: 80              
+
+# Important Note-1: In path based routing order is very important, if we are going to use  "/*", try to use it at the end of all rules.                                        
+                        
+# 1. If  "spec.ingressClassName: my-aws-ingress-class" not specified, will reference default ingress class on this kubernetes cluster
+# 2. Default Ingress class is nothing but for which ingress class we have the annotation `ingressclass.kubernetes.io/is-default-class: "true"`                      
+```
+
+## Step-04: Deploy all manifests and test
+```t
+# Deploy Kubernetes manifests
+kubectl apply -f kube-manifests/
+
+# List Pods
+kubectl get pods
+
+# List Services
+kubectl get svc
+
+# List Ingress Load Balancers
+kubectl get ingress
+
+# Describe Ingress and view Rules
+kubectl describe ingress ingress-cpr-demo
+
+# Verify AWS Load Balancer Controller logs
+kubectl -n kube-system  get pods 
+kubectl -n kube-system logs -f aws-load-balancer-controller-794b7844dd-8hk7n 
+```
+
+## Step-05: Verify Application Load Balancer on AWS Management Console**
+- Verify Load Balancer
+    - In Listeners Tab, click on **View/Edit Rules** under Rules
+- Verify Target Groups
+    - GroupD Details
+    - Targets: Ensure they are healthy
+    - Verify Health check path
+    - Verify all 3 targets are healthy)
+```t
+# Access Application
+http://<ALB-DNS-URL>/app1/index.html
+http://<ALB-DNS-URL>/app2/index.html
+http://<ALB-DNS-URL>/
+```
+
+## Step-08: Clean Up
+```t
+# Clean-Up
+kubectl delete -f kube-manifests/
+```
