@@ -55,8 +55,9 @@ eksctl create iamserviceaccount \
     --approve \
     --override-existing-serviceaccounts
 ```
-
-
+# EKS Storage - Storage Classes, Persistent Volume Claims
+## Step-01: Introduction
+### We are going to create a MySQL Database with persistence storage using AWS EBS Volumes
 - vim 01-storage-class.yml
 ```
 apiVersion: storage.k8s.io/v1
