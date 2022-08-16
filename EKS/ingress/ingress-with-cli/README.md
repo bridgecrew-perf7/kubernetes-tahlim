@@ -242,11 +242,10 @@ CHECK-3: Verify Volumes
 # Uninstall AWS Load Balancer Controller
 helm uninstall aws-load-balancer-controller -n kube-system 
 ```
-=======================================================================================================
+==============================================================================================
 ## First creating ingress class
+- vim ingressclass-resource.yaml
 ```
-vim 01-Nginx-App1-Deployment-and-NodePortService.yml
-
 ingressclass-resource.yaml
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
@@ -258,15 +257,14 @@ spec:
   controller: ingress.k8s.aws/alb
 
 # Create IngressClass Resource
-kubectl apply -f kube-manifests
+kubectl apply -f ingressclass-resource.yaml
 
 # Verify IngressClass Resource
 kubectl get ingressclass
 ```
 ## Second creating deployment and service for app1
+- vim 01-Nginx-App1-Deployment-and-NodePortService.yml
 ```
-vim 01-Nginx-App1-Deployment-and-NodePortService.yml
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -305,11 +303,12 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-```      
-## Third creating deployment and service for app2
 ```
-vim 02-Nginx-App2-Deployment-and-NodePortService.yml
+- kubectl apply -f 01-Nginx-App1-Deployment-and-NodePortService.yml
 
+## Third creating deployment and service for app2
+- vim 02-Nginx-App2-Deployment-and-NodePortService.yml
+```
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -348,11 +347,12 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-```    
-## Forth creating deployment and service for app3
 ```
-vim 03-Nginx-App3-Deployment-and-NodePortService.yml
+- kubectl apply -f 02-Nginx-App2-Deployment-and-NodePortService.yml
 
+## Forth creating deployment and service for app3
+- vim 03-Nginx-App3-Deployment-and-NodePortService.yml
+```
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -392,7 +392,8 @@ spec:
     - port: 80
       targetPort: 80
 ```      
-      
+- kubectl apply -f 03-Nginx-App3-Deployment-and-NodePortService.yml
+
 ## Step-01: Introduction
 - Discuss about the Architecture we are going to build as part of this Section
 - We are going to deploy all these 3 apps in kubernetes with context path based routing enabled in Ingress Controller
