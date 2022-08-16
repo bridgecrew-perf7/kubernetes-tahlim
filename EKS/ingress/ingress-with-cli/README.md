@@ -33,7 +33,7 @@ Note: (Access and Secrete key should be same the user which you had created eks 
 - aws-iam-authenticator help
 - kubectl cluster-info
 
-==============================================
+==========================================================================
 
 # Now We are going to create EKS Cluster & Node Groups from here
 - aws configure lis
@@ -242,53 +242,11 @@ CHECK-3: Verify Volumes
 # Uninstall AWS Load Balancer Controller
 helm uninstall aws-load-balancer-controller -n kube-system 
 ```
-## Step-05: Ingress Class Concept
-- Understand what is Ingress Class 
-- Understand how it overrides the default deprecated annotation `#kubernetes.io/ingress.class: "alb"`
-- [Ingress Class Documentation Reference](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/ingress_class/)
-- [Different Ingress Controllers available today](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
-
-## Step-06: Review IngressClass Kubernetes Manifest
-- **File Location:** `08-01-Load-Balancer-Controller-Install/kube-manifests/01-ingressclass-resource.yaml`
-- Understand in detail about annotation `ingressclass.kubernetes.io/is-default-class: "true"`
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: IngressClass
-metadata:
-  name: my-aws-ingress-class
-  annotations:
-    ingressclass.kubernetes.io/is-default-class: "true"
-spec:
-  controller: ingress.k8s.aws/alb
-
-## Additional Note
-# 1. You can mark a particular IngressClass as the default for your cluster. 
-# 2. Setting the ingressclass.kubernetes.io/is-default-class annotation to true on an IngressClass resource will ensure that new Ingresses without an ingressClassName field specified will be assigned this default IngressClass.  
-# 3. Reference: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/guide/ingress/ingress_class/
-```
-
-## Step-07: Create IngressClass Resource
-```t
-# Navigate to Directory
-cd 08-01-Load-Balancer-Controller-Install
-
-# Create IngressClass Resource
-kubectl apply -f kube-manifests
-
-# Verify IngressClass Resource
-kubectl get ingressclass
-
-# Describe IngressClass Resource
-kubectl describe ingressclass my-aws-ingress-class
-```
-
-## References
-- [AWS Load Balancer Controller Install](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)
-- [ECR Repository per region](https://docs.aws.amazon.com/eks/latest/userguide/add-ons-images.html)
-
-===========================================================================================================================
+=======================================================================================================
 ## First creating ingress class
 ```
+vim 01-Nginx-App1-Deployment-and-NodePortService.yml
+
 ingressclass-resource.yaml
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
@@ -298,6 +256,12 @@ metadata:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
   controller: ingress.k8s.aws/alb
+
+# Create IngressClass Resource
+kubectl apply -f kube-manifests
+
+# Verify IngressClass Resource
+kubectl get ingressclass
 ```
 ## Second creating deployment and service for app1
 ```
@@ -385,7 +349,7 @@ spec:
     - port: 80
       targetPort: 80
 ```    
-## Third creating deployment and service for app2
+## Forth creating deployment and service for app3
 ```
 vim 03-Nginx-App3-Deployment-and-NodePortService.yml
 
@@ -455,8 +419,9 @@ spec:
 
 
 ## Step-03: Create ALB Ingress Context path based Routing Kubernetes manifest
-- **ALB-Ingress-ContextPath-Based-Routing.yml**
-```yaml
+```
+vim 04-ALB-Ingress-ContextPath-Based-Routing.yml
+
 # Annotations Reference: https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -513,7 +478,7 @@ spec:
 ## Step-04: Deploy all manifests and test
 ```t
 # Deploy Kubernetes manifests
-kubectl apply -f kube-manifests/
+kubectl apply -f 04-ALB-Ingress-ContextPath-Based-Routing.yml
 
 # List Pods
 kubectl get pods
@@ -533,13 +498,6 @@ kubectl -n kube-system logs -f aws-load-balancer-controller-794b7844dd-8hk7n
 ```
 
 ## Step-05: Verify Application Load Balancer on AWS Management Console**
-- Verify Load Balancer
-    - In Listeners Tab, click on **View/Edit Rules** under Rules
-- Verify Target Groups
-    - GroupD Details
-    - Targets: Ensure they are healthy
-    - Verify Health check path
-    - Verify all 3 targets are healthy)
 ```t
 # Access Application
 http://<ALB-DNS-URL>/app1/index.html
@@ -547,8 +505,8 @@ http://<ALB-DNS-URL>/app2/index.html
 http://<ALB-DNS-URL>/
 ```
 
-## Step-08: Clean Up
+## Step-06: Clean Up
 ```t
 # Clean-Up
-kubectl delete -f kube-manifests/
+kubectl delete -f 04-ALB-Ingress-ContextPath-Based-Routing.yml
 ```
