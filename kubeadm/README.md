@@ -4,14 +4,16 @@
 - swapoff -a
 - sudo reboot -f
 - swapoff -a
-### Installing Docker packages:
 
+swapoff -a                 # Disable all devices marked as swap in /etc/fstab
+sed -e '/swap/ s/^#*/#/' -i /etc/fstab   # Comment the correct mounting point
+systemctl mask swap.target               # Completely disabled
+### Installing Docker packages:
 - apt install docker.io -y
 ```
 sudo sudo systemctl start docker
 sudo sudo systemctl enable docker
 ```
-
 ### Installing kubeadm, kubelet and kubectl:
 ```
 sudo apt-get update
