@@ -4,10 +4,11 @@
 - swapoff -a
 - sudo reboot -f
 - swapoff -a
-
+```
 swapoff -a                 # Disable all devices marked as swap in /etc/fstab
 sed -e '/swap/ s/^#*/#/' -i /etc/fstab   # Comment the correct mounting point
 systemctl mask swap.target               # Completely disabled
+```
 ### Installing Docker packages:
 - apt install docker.io -y
 ```
