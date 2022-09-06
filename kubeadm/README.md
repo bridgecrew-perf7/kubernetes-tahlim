@@ -38,3 +38,11 @@ sudo apt update
 - kubectl label node ip-172-31-38-105 node-role.kubernetes.io/worker=worker
 
 ## =============To Downgrade the K8S version=============
+```
+ sudo apt remove kubelet kubeadm kubectl
+ sudo kubectl version
+ sudo apt install kubelet=1.23.4-00
+ sudo apt install kubeadm=1.23.4-00
+ sudo apt install kubectl=1.23.4-00
+ sudo kubectl version
+ ```
