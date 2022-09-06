@@ -36,3 +36,5 @@ sudo apt update
         --discovery-token-ca-cert-hash sha256:7c84726ff5039d5caa6a347e508e7f04ddcf483153010341b0e5ac179b318ef1
 
 - kubectl label node ip-172-31-38-105 node-role.kubernetes.io/worker=worker
+
+## =============To Downgrade the K8S version=============
