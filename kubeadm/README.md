@@ -41,6 +41,7 @@ sudo apt-get update
 - sudo systemctl daemon-reload
 ## ==> ONLY ON MASTER NODE
 - sudo kubeadm init --pod-network-cidr=192.168.0.0/24
+- kubectl create -f https://docs.projectcalico.org/manifests/calico.ya
 
 - kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 
