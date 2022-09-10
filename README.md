@@ -1,2 +1,2 @@
-# hellowhale
-Simple Docker Demo App
+# Kubernetes notes
+All notes will update here
