@@ -44,7 +44,11 @@ sudo apt-get update
 - kubectl create -f https://docs.projectcalico.org/manifests/calico.ya
 
 - kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-
+```
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
 ## ==> ONLY ON WORKER NODE
 - kubeadm join 192.168.6.128:6443 --token p0p5d0.w75nx4n8xg6ku5te \
         --discovery-token-ca-cert-hash sha256:7c84726ff5039d5caa6a347e508e7f04ddcf483153010341b0e5ac179b318ef1
