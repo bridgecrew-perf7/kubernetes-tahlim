@@ -74,3 +74,4 @@ sudo apt-get autoremove
 sudo rm -rf ~/.kube
 ```
 
+refer this link if you get connecting worker node :  https://www.cloudsigma.com/how-to-install-and-use-kubernetes-on-ubuntu-20-04/
