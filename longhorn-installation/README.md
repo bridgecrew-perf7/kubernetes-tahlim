@@ -12,9 +12,9 @@ curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v1.3.0/scripts/en
 ```
 #####Step_3:- Installing open-iscsi:
 ```
--	sudo apt-get install open-iscsi
-- sudo systemctl enable iscsid
-- sudo systemctl start iscsid
+sudo apt-get install open-iscsi
+sudo systemctl enable iscsid
+sudo systemctl start iscsid
 ```
 #####Step_4:- Installing NFSv4 client and Iscsi:
 ```
@@ -26,9 +26,9 @@ kubectl get pod | grep longhorn-nfs-installation
 #####Step_5:- Installing longhorn:
 ```
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.3.0/deploy/longhorn.yaml
--	kubectl get pods --namespace longhorn-system (to check pods is running or not)
--	kubectl -n longhorn-system get pod
--	kubectl get svc -n longhorn-system
+kubectl get pods --namespace longhorn-system (to check pods is running or not)
+kubectl -n longhorn-system get pod
+kubectl get svc -n longhorn-system
 ```
 ### Now I am going to use longhorn from outside:
 - kubectl delete service longhorn-frontend -n longhorn-system
