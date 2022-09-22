@@ -23,6 +23,7 @@ kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.3.0/depl
 kubectl get pod | grep longhorn-iscsi-installation
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.3.0/deploy/prerequisite/longhorn-nfs-installation.yaml
 kubectl get pod | grep longhorn-nfs-installation
+```
 #####Step_5:- Installing longhorn:
 ```
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.3.0/deploy/longhorn.yaml
@@ -30,9 +31,11 @@ kubectl get pods --namespace longhorn-system (to check pods is running or not)
 kubectl -n longhorn-system get pod
 kubectl get svc -n longhorn-system
 ```
-### Now I am going to use longhorn from outside:
-- kubectl delete service longhorn-frontend -n longhorn-system
-- sudo vi  longhorn-service.yaml
+#####Step_6 Now I am going to use longhorn from outside:
+```
+kubectl delete service longhorn-frontend -n longhorn-system
+sudo vi  longhorn-service.yaml
+```
 ``` 
 apiVersion: v1
 kind: Service
